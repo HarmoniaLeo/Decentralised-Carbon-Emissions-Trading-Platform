@@ -4,4 +4,4 @@
 npm install -g truffle
 ```
 
-https://trufflesuite.com/ganache/下载Ganache客户端
+下载Ganache客户端：https://trufflesuite.com/ganache/
