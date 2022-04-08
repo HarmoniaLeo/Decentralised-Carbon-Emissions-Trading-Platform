@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Double Auction : Carbon Emmission Exchange</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg bg-dark navbar-dark fixed-top">
+      <div class="container">
+        <a href="#" class="navbar-brand"
+          >Double Auction : Carbon Emmission Exchange</a
+        >
+
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navmenu"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navmenu">
+          <ul class="navbar-nav ms-auto">
+            <!--margin start = margin left-->
+            <li class="nav-item">
+              <div class="nav-link">Seller</div>
+            </li>
+            <li class="nav-item">
+              <div class="nav-link">Buyer</div>
+            </li>
+            <li class="nav-item">
+              <div class="nav-link">market</div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <section class="p-5 bg-dark text-light text-center text-sm-start">
+      <!--padding -->
+      <div class="container">
+        <div class="d-flex">
+          <!--display flex-->
+          <div>
+            <h1>
+              What is<span class="text-success">
+                Carbon Emmission Exchange</span
+              >
+            </h1>
+            <p class="my-4">
+              <!-- margin-top margin-bottom -->
+              Lorem ipsum, dolor sit amet consectetur adipisicing elit.
+              Doloremque corporis quo, similique perferendis distinctio non eius
+              consequuntur error obcaecati quaerat iusto quos fugiat rerum, unde
+              omnis blanditiis ducimus asperiores quibusdam? Maiores nam
+              deserunt earum exercitationem eligendi, Lorem ipsum, dolor sit
+              amet consectetur adipisicing elit. Doloremque corporis quo,
+              similique perferendis distinctio non eius consequuntur error
+              obcaecati quaerat iusto quos fugiat rerum, unde omnis blanditiis
+              ducimus asperiores quibusdam? Maiores nam deserunt earum
+              exercitationem eligendi, Lorem ipsum, dolor sit amet consectetur
+              adipisicing elit. Doloremque quos fugiat rerum, unde omnis
+              blanditiis ducimus asperiores quibusdam? Maiores nam deserunt
+              earum exercitationem eligendi,
+            </p>
+            <button class="btn btn-success btn-lg">
+              Let's start an auction!
+            </button>
+          </div>
+          <img
+            src="./images/green_trading.jpg"
+            alt="showcase"
+            class="w-50 d-none d-md-block"
+          />
+        </div>
+      </div>
+    </section>
+
+    <section class="p-5 bg-success text-light">
+      <div class="container">
+        <div class="d-md-flex justify-content-between align-items-center">
+          <h3 class="mb-3">Register an account to start the auction journey</h3>
+          <div class="input-group news-input">
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Please enter your personal address"
+            />
+            <button class="btn btn-dark btn-lg">Register</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="p-5">
+      <div class="container">
+        <div class="row g-4">
+          <!--gap-->
+          <div class="col-md">
+            <div class="card bg-dark text-light">
+              <div class="card-body">
+                <div class="card-title">Buyer Agent Interface</div>
+                <form action="">
+                  <div class="form-group">
+                    <label for="buyer price">Price:</label>
+                    <input
+                      type="buyer price"
+                      class="form-control"
+                      placeholder="Enter price"
+                      id="buyerprice"
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label for="buyer quantity">Quantity :</label>
+                    <input
+                      type="buyerquantity"
+                      class="form-control"
+                      placeholder="Enter quantity"
+                      id="buyerquantity"
+                    />
+                  </div>
+                  <button type="buyerbid" class="btn btn-success">
+                    buyer bid
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md">
+            <div class="card bg-dark text-light">
+              <div class="card-body">
+                <div class="card-title">Seller Agent Interface</div>
+                <form action="">
+                  <div class="form-group">
+                    <label for="seller price">Price:</label>
+                    <input
+                      type="sellerprice"
+                      class="form-control"
+                      placeholder="Enter price"
+                      id="sellerprice"
+                    />
+                  </div>
+                  <div class="form-group">
+                    <label for="seller quantity">Quantity :</label>
+                    <input
+                      type="sellerquantity"
+                      class="form-control"
+                      placeholder="Enter quantity"
+                      id="sellerquantity"
+                    />
+                  </div>
+                  <button type="sellerbid" class="btn btn-success">
+                    seller bid
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md">
+            <div class="card bg-dark text-light">
+              <div class="card-body">
+                <div class="card-title">Market Management Interface</div>
+                <button type="market clearing" class="btn btn-success">
+                  Market Clearing
+                </button>
+                <button type="clear all" class="btn btn-success">
+                  Make Payment
+                </button>
+                <button type="clear all" class="btn btn-success">
+                  Clear All
+                </button>
+                <div class="card-text">Market Information after Clearing</div>
+                <table data-toggle="table" data-url="data1.json">
+                  <thead>
+                    <tr>
+                      <th data-field="Volume">Volume</th>
+
+                      <th data-field="Close">Close Price</th>
+                    </tr>
+                  </thead>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="p-5 bg-dark text-light">
+      <div class="container">
+        <div class="row align-items-center justify-content-between">
+          <div class="col-md p-5">
+            <h2>Project Introduction</h2>
+            <p class="lead">
+              Lorem ipsum, dolor sit amet consectetur adipisicing elit.
+              Praesentium ea ratione corporis et provident. Quia!
+            </p>
+            <p>
+              Lorem, ipsum dolor sit amet consectetur adipisicing elit. Amet
+              nostrum, aperiam assumenda vitae, beatae at sint quaerat
+              consequatur maxime, hic voluptatum ex. Dolor minus perferendis
+              magni autem exercitationem quis quos.
+            </p>
+            <a href="" class="btn btn-light">learn more</a>
+          </div>
+
+          <div class="col-md">
+            <img
+              src="./images/CO2_green.png"
+              alt="showcase"
+              class="w-50 d-none d-md-block"
+            />
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="p-5">
+      <div class="container">
+        <h2 class="text-center">Common Problems</h2>
+        <div class="accordion accordion-flush" id="accordionFlushExample">
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="flush-headingOne">
+              <button
+                class="accordion-button collapsed"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#flush-collapseOne"
+                aria-expanded="false"
+                aria-controls="flush-collapseOne"
+              >
+                Accordion Item #1
+              </button>
+            </h2>
+            <div
+              id="flush-collapseOne"
+              class="accordion-collapse collapse show"
+              aria-labelledby="flush-headingOne"
+              data-bs-parent="#accordionFlushExample"
+            >
+              <div class="accordion-body">
+                Placeholder content for this accordion, which is intended to
+                demonstrate the
+                <code>.accordion-flush</code> class. This is the first item's
+                accordion body.
+              </div>
+            </div>
+          </div>
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="flush-headingTwo">
+              <button
+                class="accordion-button collapsed"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#flush-collapseTwo"
+                aria-expanded="false"
+                aria-controls="flush-collapseTwo"
+              >
+                Accordion Item #2
+              </button>
+            </h2>
+            <div
+              id="flush-collapseTwo"
+              class="accordion-collapse collapse"
+              aria-labelledby="flush-headingTwo"
+              data-bs-parent="#accordionFlushExample"
+            >
+              <div class="accordion-body">
+                Placeholder content for this accordion, which is intended to
+                demonstrate the
+                <code>.accordion-flush</code> class. This is the second item's
+                accordion body. Let's imagine this being filled with some actual
+                content.
+              </div>
+            </div>
+          </div>
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="flush-headingThree">
+              <button
+                class="accordion-button collapsed"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#flush-collapseThree"
+                aria-expanded="false"
+                aria-controls="flush-collapseThree"
+              >
+                Accordion Item #3
+              </button>
+            </h2>
+            <div
+              id="flush-collapseThree"
+              class="accordion-collapse collapse"
+              aria-labelledby="flush-headingThree"
+              data-bs-parent="#accordionFlushExample"
+            >
+              <div class="accordion-body">
+                Placeholder content for this accordion, which is intended to
+                demonstrate the
+                <code>.accordion-flush</code> class. This is the third item's
+                accordion body. Nothing more exciting happening here in terms of
+                content, but just filling up the space to make it look, at least
+                at first glance, a bit more representative of how this would
+                look in a real-world application.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="p-4 bg-success">
+      <div class="container">
+        <h2 class="text-center text-light">Team members</h2>
+        <p class="lead text-center text-white mb-5">
+          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Hic, unde?
+        </p>
+        <div class="row g-5">
+          <div class="col-md-6 col-lg-3">
+            <div class="card bg-light">
+              <div class="card-body text-center">
+                <img
+                  src="images/team_member.JPG"
+                  class="w-50 mb-3 rounded-circle"
+                />
+                <h3 class="card-title">product owner</h3>
+                <p class="card-text">
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                  Accusamus, ratione!
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-3">
+            <div class="card bg-light">
+              <div class="card-body text-center">
+                <img
+                  src="images/team_member.JPG"
+                  class="w-50 mb-3 rounded-circle"
+                />
+                <h3 class="card-title">name1</h3>
+                <p class="card-text">
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                  Accusamus, ratione!
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-3">
+            <div class="card bg-light">
+              <div class="card-body text-center">
+                <img
+                  src="images/team_member.JPG"
+                  class="w-50 mb-3 rounded-circle"
+                />
+                <h3 class="card-title">name2</h3>
+                <p class="card-text">
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                  Accusamus, ratione!
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-3">
+            <div class="card bg-light">
+              <div class="card-body text-center">
+                <img
+                  src="images/team_member.JPG"
+                  class="w-50 mb-3 rounded-circle"
+                />
+                <h3 class="card-title">name3</h3>
+                <p class="card-text">
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                  Accusamus, ratione!
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-3">
+            <div class="card bg-light">
+              <div class="card-body text-center">
+                <img
+                  src="images/team_member.JPG"
+                  class="w-50 mb-3 rounded-circle"
+                />
+                <h3 class="card-title">name4</h3>
+                <p class="card-text">
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                  Accusamus, ratione!
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="p-5">
+      <div class="container">
+        <h2 class="text-center mb-4">Contact us</h2>
+
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">Tel：XXXXXX</li>
+          <li class="list-group-item">e-mail： @bristol.ac.uk</li>
+          <li class="list-group-item">Address：XXXXXX</li>
+        </ul>
+      </div>
+    </section>
+
+    <footer class="p-5 bg-dark text-white text-center">
+      <div class="container">
+        <p class="lead">Copyright &copy; 2022 grp-DAPP-Group2</p>
+      </div>
+    </footer>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>
