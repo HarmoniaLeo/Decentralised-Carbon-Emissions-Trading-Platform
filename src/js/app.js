@@ -117,7 +117,7 @@ App = {
             var quantity = $(".input-Quantity").val();
 
             // Execute adopt as a transaction by sending account
-            return auctionInstance.BuyerBid(account, price, quantity, {from: account, value: web3.toWei(price*quantity, 'ether'), gas: 2100000});
+            return auctionInstance.BuyerBid(account, quantity, price, {from: account, value: web3.toWei(price*quantity, 'ether'), gas: 2100000});
           }).catch(function(err) {
             window.alert(err.message);
           });
@@ -155,7 +155,7 @@ App = {
             var price = $(".input-Price").val();
             var quantity = $(".input-Quantity").val();
             // Execute adopt as a transaction by sending account
-            return auctionInstance.SellerBid(account, price, quantity, {from: account, value: web3.toWei(price*quantity, 'ether'), gas: 2100000});
+            return auctionInstance.SellerBid(account, quantity, price, {from: account});//, value: web3.toWei(price*quantity, 'ether'), gas: 2100000});
           }).catch(function(err) {
             window.alert(err.message);
           });
@@ -187,16 +187,20 @@ App = {
           App.contracts.Auction.deployed().then(function(instance) {
             auctionInstance = instance;
             return auctionInstance.marketClearing({from: account});
-          }).catch(function(err) {
-            window.alert(err.message);
+          }
+          ).then(function(){
+            App.contracts.Auction.deployed().then(function(instance) {
+              auctionInstance = instance;
+              return auctionInstance.clearingInfo();
+            }).then(function(info){
+              window.alert(info);
+            });
           });
         }
         else
         {
           window.alert("You are not the deployer. ");
         }
-      }).catch(function(err) {
-        window.alert(err.message);
       });
     });
   },
