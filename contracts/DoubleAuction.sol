@@ -17,9 +17,10 @@ contract DoubleAuction is MathForDoubleAuction {
     int clearingType; // marginal_seller = 1, marginal_buyer = 2,  exact = 3, null = 4
   }
 
-  address public market; // who deployed this contract 
   int[] _consumptionPrices; 
   int[] _generationPrices;
+  address[] public addresses; 
+  address market;
   mapping(int => int) consumptionBids;
   mapping(int => int) generationBids;
   mapping(address => Bid)  consumptionaddress;
@@ -29,10 +30,26 @@ contract DoubleAuction is MathForDoubleAuction {
   int clearingpricesell;
   
   constructor  () { //invokes only once when deploy contract to initialize contract state
+    addresses.push(msg.sender);
     market = msg.sender;
     clearingInfo.clearingPrice = 0;
     clearingInfo.clearingQuantity = 0;
     clearingInfo.clearingType = 0;
+  }
+
+  // to check whether an user is the deployer, and whether an user have bided
+  function getAddresses(address _user) public view returns(uint){
+    for(uint i = 0; i < addresses.length; i++){
+      if((_user == addresses[i])&&(i==0))
+      {
+        return 2;
+      }
+      else if(_user == addresses[i])
+      {
+        return 1;
+      }
+    }
+    return 0;
   }
 
   // buyers set bid
@@ -46,6 +63,7 @@ contract DoubleAuction is MathForDoubleAuction {
     consumptionaddress[_buyer].price=_price;
     consumptionaddress[_buyer].quantity=_quantity;
     consumptionaddress[_buyer].exist=true;
+    addresses.push(_buyer);
   }
 
    //sellers set bid
@@ -59,6 +77,7 @@ contract DoubleAuction is MathForDoubleAuction {
     generationaddress[_seller].price=_price;
     generationaddress[_seller].quantity=_quantity;
     generationaddress[_seller].exist=true;
+    addresses.push(_seller);
   }
   
 
@@ -182,6 +201,8 @@ contract DoubleAuction is MathForDoubleAuction {
     clearingInfo.clearingPrice=0;//update clearing information
     clearingInfo.clearingQuantity=0;
     clearingInfo.clearingType=6;
+    delete addresses;
+    addresses.push(market);
   }
 
   function MakePayment()public payable {

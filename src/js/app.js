@@ -68,7 +68,8 @@ App = {
     $(document).on('click', '.btn-SellerBid', App.handleSellerBid);
     $(document).on('click', '.btn-marketClearing', App.handlemarketClearing);
     $(document).on('click', '.btn-ClearAll', App.handleClearAll);
-    $(document).on('click', '.btn-MakePayment', App.handleMakePayment);
+    $(document).on('click', '.btn-buyer-MakePayment', App.handleMakePayment);
+    $(document).on('click', '.btn-seller-MakePayment', App.handleMakePayment);
   },
 
   // markAdopted: function() {
@@ -113,8 +114,8 @@ App = {
         {
           App.contracts.Auction.deployed().then(function(instance) {
             auctionInstance = instance;
-            var price = $(".input-Price").val();
-            var quantity = $(".input-Quantity").val();
+            var price = $(".input-buyer-Price").val();
+            var quantity = $(".input-buyer-Quantity").val();
 
             // Execute adopt as a transaction by sending account
             return auctionInstance.BuyerBid(account, quantity, price, {from: account, value: web3.toWei(price*quantity, 'ether'), gas: 2100000});
@@ -142,18 +143,22 @@ App = {
 
       App.contracts.Auction.deployed().then(function(instance) {
         auctionInstance = instance;
-        return auctionInstance.market();
-      }).then(function(address) {
-        if (address == account)
+        return auctionInstance.getAddresses({from: account});
+      }).then(function(type) {
+        if (type == 2)
         {
           window.alert("You are the deployer. ");
+        }
+        else if(type == 1)
+        {
+          window.alert("You already bided. Please wait for market clearing. ");
         }
         else
         {
           App.contracts.Auction.deployed().then(function(instance) {
             auctionInstance = instance;
-            var price = $(".input-Price").val();
-            var quantity = $(".input-Quantity").val();
+            var price = $(".input-seller-Price").val();
+            var quantity = $(".input-seller-Quantity").val();
             // Execute adopt as a transaction by sending account
             return auctionInstance.SellerBid(account, quantity, price, {from: account});//, value: web3.toWei(price*quantity, 'ether'), gas: 2100000});
           }).catch(function(err) {
@@ -192,9 +197,7 @@ App = {
             App.contracts.Auction.deployed().then(function(instance) {
               auctionInstance = instance;
               return auctionInstance.clearingInfo();
-            }).then(function(info){
-              window.alert(info);
-            });
+            })
           });
         }
         else
