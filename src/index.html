@@ -91,7 +91,7 @@
         <div class="row g-4">
           <!--gap-->
           <div class="col-md">
-            <div class="card bg-dark text-light">
+            <div class="card bg-light text-dark">
               <div class="card-body">
                 <div class="card-title">Buyer Agent Interface</div>
                 <form action="">
@@ -116,7 +116,10 @@
                   <button type="buyerbid" class="btn btn-success btn-BuyerBid">
                     buyer bid
                   </button>
-                  <button type="getrefund" class="btn btn-success btn-buyer-MakePayment">
+                  <button
+                    type="getrefund"
+                    class="btn btn-success btn-buyer-MakePayment"
+                  >
                     get refund
                   </button>
                 </form>
@@ -125,7 +128,7 @@
           </div>
 
           <div class="col-md">
-            <div class="card bg-dark text-light">
+            <div class="card bg-light text-dark">
               <div class="card-body">
                 <div class="card-title">Seller Agent Interface</div>
                 <form action="">
@@ -147,10 +150,16 @@
                       id="sellerquantity"
                     />
                   </div>
-                  <button type="sellerbid" class="btn btn-success btn-SellerBid">
+                  <button
+                    type="sellerbid"
+                    class="btn btn-success btn-SellerBid"
+                  >
                     seller bid
                   </button>
-                  <button type="getpayment" class="btn btn-success btn-buyer-MakePayment">
+                  <button
+                    type="getpayment"
+                    class="btn btn-success btn-buyer-MakePayment"
+                  >
                     get payment
                   </button>
                 </form>
@@ -159,24 +168,40 @@
           </div>
 
           <div class="col-md">
-            <div class="card bg-dark text-light">
+            <div class="card bg-light text-dark">
               <div class="card-body">
                 <div class="card-title">Market Management Interface</div>
-                <button type="market clearing" class="btn btn-success btn-marketClearing">
+                <button
+                  type="market clearing"
+                  class="btn btn-success btn-marketClearing"
+                >
                   Market Clearing
                 </button>
                 <button type="clear all" class="btn btn-success btn-ClearAll">
                   Clear All
                 </button>
                 <div class="card-text">Market Information after Clearing</div>
-                <table data-toggle="table" data-url="data1.json">
+                <table class="table">
                   <thead>
                     <tr>
-                      <th data-field="Volume">Volume</th>
-
-                      <th data-field="Close">Close Price</th>
+                      <th>Clearing information type</th>
+                      <th>value</th>
                     </tr>
                   </thead>
+                  <tbody>
+                    <tr class="active">
+                      <td>clearing Price</td>
+                      <td></td>
+                    </tr>
+                    <tr class="success">
+                      <td>clearing Quantity</td>
+                      <td></td>
+                    </tr>
+                    <tr class="warning">
+                      <td>clearing Type</td>
+                      <td></td>
+                    </tr>
+                  </tbody>
                 </table>
               </div>
             </div>
@@ -307,92 +332,6 @@
       </div>
     </section>
 
-    <section class="p-4 bg-success">
-      <div class="container">
-        <h2 class="text-center text-light">Team members</h2>
-        <p class="lead text-center text-white mb-5">
-          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Hic, unde?
-        </p>
-        <div class="row g-5">
-          <div class="col-md-6 col-lg-3">
-            <div class="card bg-light">
-              <div class="card-body text-center">
-                <img
-                  src="images/team_member.JPG"
-                  class="w-50 mb-3 rounded-circle"
-                />
-                <h3 class="card-title">product owner</h3>
-                <p class="card-text">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  Accusamus, ratione!
-                </p>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-6 col-lg-3">
-            <div class="card bg-light">
-              <div class="card-body text-center">
-                <img
-                  src="images/team_member.JPG"
-                  class="w-50 mb-3 rounded-circle"
-                />
-                <h3 class="card-title">name1</h3>
-                <p class="card-text">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  Accusamus, ratione!
-                </p>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-6 col-lg-3">
-            <div class="card bg-light">
-              <div class="card-body text-center">
-                <img
-                  src="images/team_member.JPG"
-                  class="w-50 mb-3 rounded-circle"
-                />
-                <h3 class="card-title">name2</h3>
-                <p class="card-text">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  Accusamus, ratione!
-                </p>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-6 col-lg-3">
-            <div class="card bg-light">
-              <div class="card-body text-center">
-                <img
-                  src="images/team_member.JPG"
-                  class="w-50 mb-3 rounded-circle"
-                />
-                <h3 class="card-title">name3</h3>
-                <p class="card-text">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  Accusamus, ratione!
-                </p>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-6 col-lg-3">
-            <div class="card bg-light">
-              <div class="card-body text-center">
-                <img
-                  src="images/team_member.JPG"
-                  class="w-50 mb-3 rounded-circle"
-                />
-                <h3 class="card-title">name4</h3>
-                <p class="card-text">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  Accusamus, ratione!
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
     <section class="p-5">
       <div class="container">
         <h2 class="text-center mb-4">Contact us</h2>
@@ -425,3 +364,4 @@
     <script src="js/app.js"></script>
   </body>
 </html>
+
