@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity ^0.8.0;
+pragma solidity 0.8.7;
 // Importing MathForDoubleAuction library: calculate average/quick sort descending/quick sort ascending
 import "./MathForDoubleAuction.sol";
 
