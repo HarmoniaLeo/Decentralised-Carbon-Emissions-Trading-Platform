@@ -61,7 +61,15 @@ App = {
         auctionInstance = instance;
         var price = $(".input-buyer-Price").val();
         var quantity = $(".input-buyer-Quantity").val();
-        return auctionInstance.BuyerBid(account, quantity, price, {from: account, value: web3.toWei(price*quantity, 'ether'), gas: 2100000});
+        var regPos = /^[1-9]\d*$/;
+        if(regPos.test(price)&&regPos.test(quantity))
+        {
+          return auctionInstance.BuyerBid(account, quantity, price, {from: account, value: web3.toWei(price*quantity, 'ether'), gas: 2100000});
+        }
+        else
+        {
+          window.alert("Please enter positive integer. ");
+        }
         }
       ).catch(function(err) {
         window.alert(err.message);
