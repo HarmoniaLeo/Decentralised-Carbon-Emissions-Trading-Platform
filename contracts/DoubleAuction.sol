@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity 0.8.7;
+pragma solidity ^0.8.0;
 // Importing MathForDoubleAuction library: calculate average/quick sort descending/quick sort ascending
 import "./MathForDoubleAuction.sol";
 
@@ -9,7 +9,7 @@ contract DoubleAuction is MathForDoubleAuction {
   struct Bid {
     int32 quantity;
     int32 price;
-    bool exist; // this is added for checking whether one address has placed a bid. 
+    bool exist; // this is added for checking whether one address has placed a bid.
   }
   struct Clearing {
     int32 clearingQuantity;
@@ -133,7 +133,6 @@ contract DoubleAuction is MathForDoubleAuction {
             clearingpricesell=sell.quantity-(sell_quantity-buy_quantity);
         }
         else{
-            clearingpricesell=buy_quantity;
             supply_quantity = buy_quantity;
             demand_quantity = buy_quantity;
             clearingInfo.clearingQuantity = buy_quantity;
@@ -194,9 +193,9 @@ contract DoubleAuction is MathForDoubleAuction {
   }
 
   function MakePayment()public payable {
-    require(consumptionaddress[msg.sender].exist==true||generationaddress[msg.sender].exist==true,"Payment Error: 1.Neither a buyer, nor a seller 2.Alraedy Paid, can't be paid twice!");
     address payable recipiant;
     uint32 value;
+    require(consumptionaddress[msg.sender].exist==true||generationaddress[msg.sender].exist==true,"Neither a buyer, nor a seller.");
     recipiant = payable(msg.sender);
     if (consumptionaddress[recipiant].exist==true){
      if(consumptionaddress[recipiant].price < clearingInfo.clearingPrice){
@@ -208,7 +207,6 @@ contract DoubleAuction is MathForDoubleAuction {
      else{
        value = uint32(clearingInfo.clearingPrice * clearingpricebuyleft);
      }
-     consumptionaddress[msg.sender].exist=false;
     }
     if (generationaddress[recipiant].exist==true){// I use 2 if here instead of if-else, so that a buyer can also be a seller
       if(generationaddress[recipiant].price < clearingInfo.clearingPrice){
@@ -220,7 +218,6 @@ contract DoubleAuction is MathForDoubleAuction {
      else{
        value = uint32(0);
      }
-     generationaddress[msg.sender].exist=false;
     }
     (bool success, ) =recipiant.call{gas:40000,value:value*1000000000000000000}(""); // take 1 ETH as 1 unit, 10^18 wei= 1 ETH
     require(success, "Payment failed");

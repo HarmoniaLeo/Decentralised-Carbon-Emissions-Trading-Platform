@@ -113,8 +113,8 @@ App = {
     }).then(function(){
       return auctionInstance.clearingInfo();
     }).then(function(clearingInfo){
-      $(".td-ClearingPrice").html(String(clearingInfo[0]));
-      $(".td-ClearingQuantity").html(String(clearingInfo[1]));
+      $(".td-ClearingPrice").html(String(clearingInfo[1]));
+      $(".td-ClearingQuantity").html(String(clearingInfo[0]));
       if (clearingInfo[2] == 0)
       {
         $(".td-ClearingType").html("Error");
