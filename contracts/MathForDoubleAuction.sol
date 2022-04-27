@@ -4,21 +4,21 @@ pragma solidity ^0.8.0;
 
 contract MathForDoubleAuction {
 
-  function getAvg(int a, int b) pure internal returns(int){
+  function getAvg(int32 a, int32 b) pure internal returns(int32){
       return (a + b)/2;
   }
 
   /*Buyers are in descending order, with the highest price in front*/
-  function quickSortDescending(int[] storage arr, int left, int right) internal  {
-        int i = left;
-        int j = right;
-        uint pivotIndex = uint(left + (right - left) / 2);
-        int pivot = arr[pivotIndex];
+  function quickSortDescending(int32[] storage arr, int32 left, int32 right) internal  {
+        int32 i = left;
+        int32 j = right;
+        uint32 pivotIndex = uint32(left + (right - left) / 2);
+        int32 pivot = arr[pivotIndex];
         while (i <= j) {
-            while (arr[uint(i)] > pivot) i++;
-            while (arr[uint(j)] < pivot) j--;
+            while (arr[uint32(i)] > pivot) i++;
+            while (arr[uint32(j)] < pivot) j--;
             if (i <= j) {
-                (arr[uint(i)], arr[uint(j)]) = (arr[uint(j)], arr[uint(i)]);
+                (arr[uint32(i)], arr[uint32(j)]) = (arr[uint32(j)], arr[uint32(i)]);
                 i++;
                 j--;
             }
@@ -30,16 +30,16 @@ contract MathForDoubleAuction {
     }
 
   /*Sellers are in ascending order, with the lowest price in front*/
-  function quickSortAscending(int[] storage arr, int left, int right) internal {
-        int i = left;
-        int j = right;
-        uint pivotIndex = uint(left + (right - left) / 2);
-        int pivot = arr[pivotIndex];
+  function quickSortAscending(int32[] storage arr, int32 left, int32 right) internal {
+        int32 i = left;
+        int32 j = right;
+        uint32 pivotIndex = uint32(left + (right - left) / 2);
+        int32 pivot = arr[pivotIndex];
         while (i <= j) {
-            while (arr[uint(i)] < pivot) i++;
-            while (arr[uint(j)] > pivot) j--;
+            while (arr[uint32(i)] < pivot) i++;
+            while (arr[uint32(j)] > pivot) j--;
             if (i <= j) {
-                (arr[uint(i)], arr[uint(j)]) = (arr[uint(j)], arr[uint(i)]);
+                (arr[uint32(i)], arr[uint32(j)]) = (arr[uint32(j)], arr[uint32(i)]);
                 i++;
                 j--;
             }

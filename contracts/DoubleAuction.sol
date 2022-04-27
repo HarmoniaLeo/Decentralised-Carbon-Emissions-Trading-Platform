@@ -7,53 +7,39 @@ import "./MathForDoubleAuction.sol";
 contract DoubleAuction is MathForDoubleAuction {
 
   struct Bid {
-    int quantity;
-    int price;
+    int32 quantity;
+    int32 price;
     bool exist; // this is added for checking whether one address has placed a bid.
   }
   struct Clearing {
-    int clearingQuantity;
-    int clearingPrice;
-    int clearingType; // marginal_seller = 1, marginal_buyer = 2,  exact = 3, null = 4
+    int32 clearingQuantity;
+    int32 clearingPrice;
+    int32 clearingType; // marginal_seller = 1, marginal_buyer = 2,  exact = 3, null = 4
   }
 
-  int[] _consumptionPrices; 
-  int[] _generationPrices;
-  address[] public addresses; 
-  address market;
-  mapping(int => int) consumptionBids;
-  mapping(int => int) generationBids;
+  address public market; // who deployed this contract 
+  int32[] _consumptionPrices; 
+  int32[] _generationPrices;
+  int32 clearingpricebuyleft;
+  int32 clearingpricesell;
+  mapping(int32 => int32) consumptionBids;
+  mapping(int32 => int32) generationBids;
   mapping(address => Bid)  consumptionaddress;
   mapping(address => Bid)  generationaddress;
   Clearing public clearingInfo;
-  int clearingpricebuyleft;
-  int clearingpricesell;
+
   
   constructor  () { //invokes only once when deploy contract to initialize contract state
-    addresses.push(msg.sender);
     market = msg.sender;
     clearingInfo.clearingPrice = 0;
     clearingInfo.clearingQuantity = 0;
     clearingInfo.clearingType = 0;
   }
 
-  // to check whether an user is the deployer, and whether an user have bided
-  function getAddresses(address _user) public view returns(uint){
-    for(uint i = 0; i < addresses.length; i++){
-      if((_user == addresses[i])&&(i==0))
-      {
-        return 2;
-      }
-      else if(_user == addresses[i])
-      {
-        return 1;
-      }
-    }
-    return 0;
-  }
-
   // buyers set bid
-  function BuyerBid(address _buyer,int _quantity, int _price) payable public {
+  function BuyerBid(address _buyer,int32 _quantity, int32 _price) payable public {
+    require(consumptionaddress[msg.sender].exist==false,"You can't place a buyer order twice.");
+    require(msg.sender!=market,"Market address can't place bid.");
     if(consumptionBids[_price]==0){
       _consumptionPrices.push(_price);
       consumptionBids[_price] = _quantity;
@@ -63,11 +49,12 @@ contract DoubleAuction is MathForDoubleAuction {
     consumptionaddress[_buyer].price=_price;
     consumptionaddress[_buyer].quantity=_quantity;
     consumptionaddress[_buyer].exist=true;
-    addresses.push(_buyer);
   }
 
    //sellers set bid
-  function SellerBid(address _seller,int _quantity, int _price) payable public{
+  function SellerBid(address _seller,int32 _quantity, int32 _price)  public{
+    require(generationaddress[msg.sender].exist==false,"You can't place a seller order twice.");
+    require(msg.sender!=market,"Market address can't place bid.");
     if(generationBids[_price]==0){
       _generationPrices.push(_price);
       generationBids[_price] = _quantity;
@@ -77,28 +64,29 @@ contract DoubleAuction is MathForDoubleAuction {
     generationaddress[_seller].price=_price;
     generationaddress[_seller].quantity=_quantity;
     generationaddress[_seller].exist=true;
-    addresses.push(_seller);
   }
   
 
   function marketClearing() public {
     // at least one buyer and  oen seller,otherwise throw error
     require(_consumptionPrices.length > 0 && _generationPrices.length > 0,"Lack of bidder!"); 
+    require(msg.sender == market,"Only Market address can call market clearing.");
     computeClearing();
   }
  
   function computeClearing() private {
+    
+    int32 demand_quantity = 0;
+    int32 supply_quantity = 0;
+    int32 buy_quantity = 0;
+    int32 sell_quantity = 0;
+    uint32 i = 0;  
+    uint32 j = 0;
     bool check = false;
-    int demand_quantity = 0;
-    int supply_quantity = 0;
-    int buy_quantity = 0;
-    int sell_quantity = 0;
-    uint i = 0;  
-    uint j = 0;
     
     //sort arrays, consumer's bid descending, producer's ascending
-    quickSortDescending(_consumptionPrices, 0, int(_consumptionPrices.length - 1));
-    quickSortAscending(_generationPrices, 0, int(_generationPrices.length - 1));
+    quickSortDescending(_consumptionPrices, 0, int32(int(_consumptionPrices.length - 1)));
+    quickSortAscending(_generationPrices, 0, int32(int(_generationPrices.length - 1)));
 
     Bid memory buy = Bid({
         quantity: consumptionBids[_consumptionPrices[i]],
@@ -110,8 +98,8 @@ contract DoubleAuction is MathForDoubleAuction {
         price: _generationPrices[j],
         exist:true});
     clearingInfo.clearingType = 4;  //cleartype:null 4 no deal
-    int b = sell.price; 
-    int a = buy.price;
+    int32 b = sell.price; 
+    int32 a = buy.price;
     while(i<_consumptionPrices.length && j<_generationPrices.length && buy.price>=sell.price){
         buy_quantity = demand_quantity + buy.quantity;
         sell_quantity = supply_quantity + sell.quantity;
@@ -188,12 +176,13 @@ contract DoubleAuction is MathForDoubleAuction {
   }
 
   function ClearAll() public {
-    for (uint cleanConsumptionIndex = 0; cleanConsumptionIndex < _consumptionPrices.length; cleanConsumptionIndex++){
-      int consPrice = _consumptionPrices[cleanConsumptionIndex];
+    require(msg.sender == market,"Only Market address can clear all records");
+    for (uint32 cleanConsumptionIndex = 0; cleanConsumptionIndex < _consumptionPrices.length; cleanConsumptionIndex++){
+      int32 consPrice = _consumptionPrices[cleanConsumptionIndex];
       consumptionBids[consPrice] = 0;
     }//clear mapping
-    for (uint cleanGenerationIndex = 0; cleanGenerationIndex < _generationPrices.length; cleanGenerationIndex++){
-      int genPrice = _generationPrices[cleanGenerationIndex];
+    for (uint32 cleanGenerationIndex = 0; cleanGenerationIndex < _generationPrices.length; cleanGenerationIndex++){
+      int32 genPrice = _generationPrices[cleanGenerationIndex];
       generationBids[genPrice] = 0;
     }
     delete _consumptionPrices; //delete arrays
@@ -201,35 +190,33 @@ contract DoubleAuction is MathForDoubleAuction {
     clearingInfo.clearingPrice=0;//update clearing information
     clearingInfo.clearingQuantity=0;
     clearingInfo.clearingType=6;
-    delete addresses;
-    addresses.push(market);
   }
 
   function MakePayment()public payable {
     address payable recipiant;
-    uint value;
+    uint32 value;
     require(consumptionaddress[msg.sender].exist==true||generationaddress[msg.sender].exist==true,"Neither a buyer, nor a seller.");
     recipiant = payable(msg.sender);
     if (consumptionaddress[recipiant].exist==true){
      if(consumptionaddress[recipiant].price < clearingInfo.clearingPrice){
-       value = uint(consumptionaddress[recipiant].price * consumptionaddress[recipiant].quantity);
+       value = uint32(consumptionaddress[recipiant].price * consumptionaddress[recipiant].quantity);
      }
      else if(consumptionaddress[recipiant].price > clearingInfo.clearingPrice){
-       value = uint((consumptionaddress[recipiant].price-clearingInfo.clearingPrice) * consumptionaddress[recipiant].quantity);
+       value = uint32((consumptionaddress[recipiant].price-clearingInfo.clearingPrice) * consumptionaddress[recipiant].quantity);
      }
      else{
-       value = uint(clearingInfo.clearingPrice * clearingpricebuyleft);
+       value = uint32(clearingInfo.clearingPrice * clearingpricebuyleft);
      }
     }
     if (generationaddress[recipiant].exist==true){// I use 2 if here instead of if-else, so that a buyer can also be a seller
       if(generationaddress[recipiant].price < clearingInfo.clearingPrice){
-       value = uint(clearingInfo.clearingPrice * generationaddress[recipiant].quantity);
+       value = uint32(clearingInfo.clearingPrice * generationaddress[recipiant].quantity);
      }
      else if(generationaddress[recipiant].price == clearingInfo.clearingPrice){
-       value = uint(clearingInfo.clearingPrice * clearingpricesell);
+       value = uint32(clearingInfo.clearingPrice * clearingpricesell);
      }
      else{
-       value = uint(0);
+       value = uint32(0);
      }
     }
     (bool success, ) =recipiant.call{gas:40000,value:value*1000000000000000000}(""); // take 1 ETH as 1 unit, 10^18 wei= 1 ETH

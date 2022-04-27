@@ -3,51 +3,24 @@ App = {
   contracts: {},
 
   init: async function() {
-    // Load pets.
-    $.getJSON('../pets.json', function(data) {
-      var petsRow = $('#petsRow');
-      var petTemplate = $('#petTemplate');
-
-      for (i = 0; i < 1; i ++) {
-        petTemplate.find('.panel-title').text(data[i].name);
-        petTemplate.find('img').attr('src', data[i].picture);
-        petTemplate.find('.pet-breed').text(data[i].breed);
-        petTemplate.find('.pet-age').text(data[i].age);
-        petTemplate.find('.pet-location').text(data[i].location);
-        petTemplate.find('.btn-adopt').attr('data-id', data[i].id);
-
-        petsRow.append(petTemplate.html());
-      }
-    });
-
-    return await App.initWeb3();
+    //Call an asynchronous function to init the web3 provider
+    return await App.initWeb3();  
   },
 
+  //The asynchronous function to init the web3 provider
   initWeb3: async function() {
-    if (window.ethereum) {
-      App.web3Provider = window.ethereum;
-      try {
-        // Request account access
-        await window.ethereum.request({ method: "eth_requestAccounts" });;
-      } catch (error) {
-        // User denied account access...
-        console.error("User denied account access")
-      }
-    }
-    // Legacy dapp browsers...
-    else if (window.web3) {
-      App.web3Provider = window.web3.currentProvider;
-    }
-    // If no injected web3 instance is detected, fall back to Ganache
-    else {
-      App.web3Provider = new Web3.providers.HttpProvider('http://localhost:7545');
-    }
+    //MetaMask injects a global API into websites visited by its users at window.ethereum. 
+    //This API allows websites to request users' Ethereum accounts, read data from blockchains the user is connected to, and suggest that the user sign messages and transactions.
+    App.web3Provider = window.ethereum;
+    await window.ethereum.request({ method: "eth_requestAccounts" });
     web3 = new Web3(App.web3Provider);
 
     return App.initContract();
   },
 
+  //Instantiate contract artifact
   initContract: function() {
+
       $.getJSON('DoubleAuction.json', function(data) {
       // Get the necessary contract artifact file and instantiate it with @truffle/contract
       var AuctionArtifact = data;
@@ -72,24 +45,6 @@ App = {
     $(document).on('click', '.btn-seller-MakePayment', App.handleMakePayment);
   },
 
-  // markAdopted: function() {
-  //   var adoptionInstance;
-
-  //   App.contracts.Adoption.deployed().then(function(instance) {
-  //     adoptionInstance = instance;
-
-  //     return adoptionInstance.getAdopters.call();
-  //   }).then(function(adopters) {
-  //     for (i = 0; i < adopters.length; i++) {
-  //       if (adopters[i] !== '0x0000000000000000000000000000000000000000') {
-  //         $('.panel-pet').eq(i).find('button').text('Success').attr('disabled', true);
-  //       }
-  //     }
-  //   }).catch(function(err) {
-  //     window.alert(err.message);
-  //   });
-  // },
-
   handleBuyerBid: function(event) {
     event.preventDefault();
 
@@ -104,26 +59,11 @@ App = {
 
       App.contracts.Auction.deployed().then(function(instance) {
         auctionInstance = instance;
-        return auctionInstance.market();
-      }).then(function(address) {
-        if (address == account)
-        {
-          window.alert("You are the deployer. ");
+        var price = $(".input-buyer-Price").val();
+        var quantity = $(".input-buyer-Quantity").val();
+        return auctionInstance.BuyerBid(account, quantity, price, {from: account, value: web3.toWei(price*quantity, 'ether'), gas: 2100000});
         }
-        else
-        {
-          App.contracts.Auction.deployed().then(function(instance) {
-            auctionInstance = instance;
-            var price = $(".input-buyer-Price").val();
-            var quantity = $(".input-buyer-Quantity").val();
-
-            // Execute adopt as a transaction by sending account
-            return auctionInstance.BuyerBid(account, quantity, price, {from: account, value: web3.toWei(price*quantity, 'ether'), gas: 2100000});
-          }).catch(function(err) {
-            window.alert(err.message);
-          });
-        }
-      }).catch(function(err) {
+      ).catch(function(err) {
         window.alert(err.message);
       });
     });
@@ -143,28 +83,9 @@ App = {
 
       App.contracts.Auction.deployed().then(function(instance) {
         auctionInstance = instance;
-        return auctionInstance.getAddresses({from: account});
-      }).then(function(type) {
-        if (type == 2)
-        {
-          window.alert("You are the deployer. ");
-        }
-        else if(type == 1)
-        {
-          window.alert("You already bided. Please wait for market clearing. ");
-        }
-        else
-        {
-          App.contracts.Auction.deployed().then(function(instance) {
-            auctionInstance = instance;
-            var price = $(".input-seller-Price").val();
-            var quantity = $(".input-seller-Quantity").val();
-            // Execute adopt as a transaction by sending account
-            return auctionInstance.SellerBid(account, quantity, price, {from: account});//, value: web3.toWei(price*quantity, 'ether'), gas: 2100000});
-          }).catch(function(err) {
-            window.alert(err.message);
-          });
-        }
+        var price = $(".input-seller-Price").val();
+        var quantity = $(".input-seller-Quantity").val();
+        return auctionInstance.SellerBid(account, quantity, price, {from: account, gas: 2100000});
       }).catch(function(err) {
         window.alert(err.message);
       });
@@ -185,25 +106,37 @@ App = {
 
       App.contracts.Auction.deployed().then(function(instance) {
         auctionInstance = instance;
-        return auctionInstance.market();
-      }).then(function(address) {
-        if (address == account)
-        {
-          App.contracts.Auction.deployed().then(function(instance) {
-            auctionInstance = instance;
-            return auctionInstance.marketClearing({from: account});
-          }
-          ).then(function(){
-            App.contracts.Auction.deployed().then(function(instance) {
-              auctionInstance = instance;
-              return auctionInstance.clearingInfo();
-            })
-          });
-        }
-        else
-        {
-          window.alert("You are not the deployer. ");
-        }
+        return auctionInstance.marketClearing({from: account});
+      
+    }).then(function(code){
+      window.alert(code);
+    }).then(function(){
+      return auctionInstance.clearingInfo();
+    }).then(function(clearingInfo){
+      $(".td-ClearingPrice").html(String(clearingInfo[0]));
+      $(".td-ClearingQuantity").html(String(clearingInfo[1]));
+      if (clearingInfo[2] == 0)
+      {
+        $(".td-ClearingType").html("Error");
+      }
+      else if (clearingInfo[2] == 1)
+      {
+        $(".td-ClearingType").html("Marginal Seller");
+      }
+      else if (clearingInfo[2] == 2)
+      {
+        $(".td-ClearingType").html("Marginal Buyer");
+      }
+      else if (clearingInfo[2] == 3)
+      {
+        $(".td-ClearingType").html("Exact");
+      }
+      else if (clearingInfo[2] == 4)
+      {
+        $(".td-ClearingType").html("Null");
+      }
+    }).catch(function(err) {
+        window.alert(err.message);
       });
     });
   },
@@ -222,24 +155,13 @@ App = {
 
       App.contracts.Auction.deployed().then(function(instance) {
         auctionInstance = instance;
-        return auctionInstance.market();
-      }).then(function(address) {
-        if (address == account)
-        {
-          App.contracts.Auction.deployed().then(function(instance) {
-            auctionInstance = instance;
-    
-            // Execute adopt as a transaction by sending account
-            return auctionInstance.ClearAll({from: account});
-          }).catch(function(err) {
-            window.alert(err.message);
-          });
-        }
-        else
-        {
-          window.alert("You are not the deployer. ");
-        }
-      }).catch(function(err) {
+        return auctionInstance.ClearAll({from: account});
+      }).then(function(){
+        $(".td-ClearingPrice").html();
+        $(".td-ClearingQuantity").html();
+        $(".td-ClearingType").html();
+      }
+      ).catch(function(err) {
         window.alert(err.message);
       });
 
@@ -260,23 +182,7 @@ App = {
 
       App.contracts.Auction.deployed().then(function(instance) {
         auctionInstance = instance;
-        return auctionInstance.market();
-      }).then(function(address) {
-        if (address == account)
-        {
-          window.alert("You are the deployer. ");
-        }
-        else
-        {
-          App.contracts.Auction.deployed().then(function(instance) {
-            auctionInstance = instance;
-    
-            // Execute adopt as a transaction by sending account
-            return auctionInstance.MakePayment({from: account});
-          }).catch(function(err) {
-            window.alert(err.message);
-          });
-        }
+        return auctionInstance.MakePayment({from: account});
       }).catch(function(err) {
         window.alert(err.message);
       });
