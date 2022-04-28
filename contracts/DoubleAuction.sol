@@ -190,7 +190,7 @@ contract DoubleAuction is MathForDoubleAuction {
     delete _generationPrices;
     clearingInfo.clearingPrice=0;//update clearing information
     clearingInfo.clearingQuantity=0;
-    clearingInfo.clearingType=6;
+    clearingInfo.clearingType=4;
   }
 
   function MakePayment()public payable {
