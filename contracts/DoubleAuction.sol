@@ -196,33 +196,31 @@ contract DoubleAuction is MathForDoubleAuction {
   function MakePayment()public payable {
     require(consumptionaddress[msg.sender].exist==true||generationaddress[msg.sender].exist==true,"Payment Error: 1.Neither a buyer, nor a seller 2.Alraedy Paid, can't be paid twice!");
     address payable recipiant;
-    uint32 value;
+    uint32 value1=0;
+    uint32 value2=0;
     recipiant = payable(msg.sender);
     if (consumptionaddress[recipiant].exist==true){
      if(consumptionaddress[recipiant].price < clearingInfo.clearingPrice){
-       value = uint32(consumptionaddress[recipiant].price * consumptionaddress[recipiant].quantity);
+       value1 = uint32(consumptionaddress[recipiant].price * consumptionaddress[recipiant].quantity);
      }
      else if(consumptionaddress[recipiant].price > clearingInfo.clearingPrice){
-       value = uint32((consumptionaddress[recipiant].price-clearingInfo.clearingPrice) * consumptionaddress[recipiant].quantity);
+       value1 = uint32((consumptionaddress[recipiant].price-clearingInfo.clearingPrice) * consumptionaddress[recipiant].quantity);
      }
      else{
-       value = uint32(clearingInfo.clearingPrice * clearingpricebuyleft);
+       value1 = uint32(clearingInfo.clearingPrice * clearingpricebuyleft);
      }
      consumptionaddress[msg.sender].exist=false;
     }
     if (generationaddress[recipiant].exist==true){// I use 2 if here instead of if-else, so that a buyer can also be a seller
       if(generationaddress[recipiant].price < clearingInfo.clearingPrice){
-       value = uint32(clearingInfo.clearingPrice * generationaddress[recipiant].quantity);
+       value2 = uint32(clearingInfo.clearingPrice * generationaddress[recipiant].quantity);
      }
      else if(generationaddress[recipiant].price == clearingInfo.clearingPrice){
-       value = uint32(clearingInfo.clearingPrice * clearingpricesell);
-     }
-     else{
-       value = uint32(0);
+       value2 = uint32(clearingInfo.clearingPrice * clearingpricesell);
      }
      generationaddress[msg.sender].exist=false;
     }
-    (bool success, ) =recipiant.call{gas:40000,value:value*1000000000000000000}(""); // take 1 ETH as 1 unit, 10^18 wei= 1 ETH
+    (bool success, ) =recipiant.call{gas:40000,value:(value1+value2)*1000000000000000000}(""); // take 1 ETH as 1 unit, 10^18 wei= 1 ETH
     require(success, "Payment failed");
   }
 }
