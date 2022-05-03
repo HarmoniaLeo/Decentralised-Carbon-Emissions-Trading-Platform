@@ -2,12 +2,12 @@
 Testing environment：ganache-cli -m "pizza praise exercise grab base strong much subject rude sniff custom seed"
 
 #1.Order test
-seller:price amout
-      6     1
-      4     1
-buyer:price amout
-      4     1
-      3     2
+seller bid:price amount
+             6     2
+             4     1
+buyer bid:price amount
+             4     1
+             3     2
 
 #2.Result
 Using network 'development'.
