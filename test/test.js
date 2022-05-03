@@ -61,7 +61,7 @@ contract('DoubleAuction',accounts => {
         });
     });
     describe("test ClearAll", () => {
-        it("test ClearAllt", async () => {
+        it("test ClearAll", async () => {
             await auctionInstance.ClearAll()
         });
     });
