@@ -19,7 +19,7 @@ We denote the command to be entered on the terminal as: ! command
 
    <img src="media/image-20220511012418579.png" alt="image-20220511012418579" width="50%" /> 
 
-3. Open another terminal. Clone the repository via: ! git clone git@github.com:HarmoniaLeo/FTGP-Group2
+3. Open another terminal. Clone the repository via: ! git clone git@github.com:HarmoniaLeo/Decentralised-Carbon-Emissions-Trading-Platform
 
 4. Go to the repository directory and install the Dapp: ! npm install
 
